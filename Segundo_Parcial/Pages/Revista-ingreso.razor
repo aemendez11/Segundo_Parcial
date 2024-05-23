@@ -1,0 +1,111 @@
+﻿@page "/revista-crear"
+@inject HttpClient http
+@inject NavigationManager NavigationManager
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+<h3>Ingrese los datos de la Revista</h3>
+<EditForm Model="@revista" OnValidSubmit="@Guardar">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label for="Titulo">Titulo de la Revista</label>
+        <InputText id="Titulo" @bind-Value="revista.Titulo" class="form-control" />
+        <ValidationMessage For="() => revista.Titulo" />
+    </div>
+    <div class="form-group">
+        <label for="Autor">Nombre del Autor de la revista</label>
+        <InputText id="Autor" @bind-Value="revista.Autor" class="form-control" />
+        <ValidationMessage For="() => revista.Autor" />
+    </div>
+    <div class="form-group">
+        <label for="Genero"> Descripcion del producto </label>
+        <InputText id="Genero" @bind-Value="revista.Genero" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="A_publicacion">Año de publicacion</label>
+        <InputDate id="A_publicacion" @bind-Value="revista.A_publicacion" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="Volumen">Numero de Volumen de la revista</label>
+        <InputNumber id="Volumen" @bind-Value="revista.Volumen" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="Numero_ejemplar ">Numero de Ejemplar de la revista</label>
+        <InputNumber id="Numero_ejemplar " @bind-Value="revista.Numero_ejemplar " class="form-control" />
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </div>
+    </EditForm>
+
+@* agregar tabla  *@
+@if (revistas != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Titulo</th>
+                <th>Autor</th>
+                <th>Genero</th>
+                <th>Año de publicacion</th>
+                <th>Volumen</th>
+                <th>Numero de ejemplar</th>
+                <th>Eliminar</th>
+                <th>Editar</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var revista in revistas)
+            {
+                <tr>
+                    <td>@revista.Titulo</td>
+                    <td>@revista.Autor</td>
+                    <td>@revista.Genero</td>
+                    <td>@revista.A_publicacion</td>
+                    <td>@revista.Volumen</td>
+                    <td>@revista.Numero_ejemplar</td>
+                    @* <td>
+                        <button class="btn btn-danger"
+                                @onclick="@(() => Borrar(revista.Volumen))">
+                            Eliminar
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-warning"
+                                @onclick="@(() => NavigationManager.NavigateTo($"/revistas-editar/{revista.Volumen  }"))">
+                            Editar
+                        </button>
+                    </td> *@
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    private Revistas revista = new Revistas();
+    List<Revistas> revistas = new List<Revistas>();
+
+    protected async Task Guardar()
+    {
+        revistas.Add(revista);
+        revista = new Revistas();
+        await localStorage.SetItemAsync("revistas",revistas);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {   //La primera vez que se corre poner en comentarios, pues como no existen datos
+        //convierta la lista catedraticos en null
+        //revistas = await localStorage.GetItemAsync<List<Revistas>>("revistas");
+    }
+
+    // protected async Task Borrar(int Volumen)
+    // {
+    //     revistas.Remove(revistas.First(c => c.Volumen == Volumen));
+    //     await localStorage.SetItemAsync("revistas", revistas);
+
+    // }
+
+}
