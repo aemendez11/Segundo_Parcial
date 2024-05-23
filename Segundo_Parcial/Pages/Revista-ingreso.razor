@@ -67,16 +67,16 @@
                     <td>@revista.Numero_ejemplar</td>
                     @* <td>
                         <button class="btn btn-danger"
-                                @onclick="@(() => Borrar(revista.Volumen))">
+                                @onclick="@(() => Borrar(revista.Titulo))">
                             Eliminar
                         </button>
-                    </td>
+                    </td> *@
                     <td>
                         <button class="btn btn-warning"
-                                @onclick="@(() => NavigationManager.NavigateTo($"/revistas-editar/{revista.Volumen  }"))">
+                                @onclick="@(() => NavigationManager.NavigateTo($"/revista-editar/{revista.Titulo}"))">
                             Editar
                         </button>
-                    </td> *@
+                    </td>
                 </tr>
             }
         </tbody>
@@ -98,12 +98,12 @@
     protected override async Task OnInitializedAsync()
     {   //La primera vez que se corre poner en comentarios, pues como no existen datos
         //convierta la lista catedraticos en null
-        //revistas = await localStorage.GetItemAsync<List<Revistas>>("revistas");
+        revistas = await localStorage.GetItemAsync<List<Revistas>>("revistas");
     }
 
-    // protected async Task Borrar(int Volumen)
+    // protected async Task Borrar(string Titulo)
     // {
-    //     revistas.Remove(revistas.First(c => c.Volumen == Volumen));
+    //     revistas.Remove(revistas.First(c => c.Titulo == Titulo));
     //     await localStorage.SetItemAsync("revistas", revistas);
 
     // }

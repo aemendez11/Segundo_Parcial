@@ -1,0 +1,57 @@
+﻿@page "/revista-editar/{titulo}"
+@inject HttpClient http
+@inject NavigationManager NavigationManager
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+<h3>Editar Revista</h3>
+<EditForm Model="@revista" OnValidSubmit="@Guardar">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label for="Titulo">Titulo de la Revista</label>
+        <InputText id="Titulo" @bind-Value="revista.Titulo" class="form-control" />
+        <ValidationMessage For="() => revista.Titulo" />
+    </div>
+    <div class="form-group">
+        <label for="Autor">Nombre del Autor de la revista</label>
+        <InputText id="Autor" @bind-Value="revista.Autor" class="form-control" />
+        <ValidationMessage For="() => revista.Autor" />
+    </div>
+    <div class="form-group">
+        <label for="Genero"> Descripcion del producto </label>
+        <InputText id="Genero" @bind-Value="revista.Genero" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="A_publicacion">Año de publicacion</label>
+        <InputDate id="A_publicacion" @bind-Value="revista.A_publicacion" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="Volumen">Numero de Volumen de la revista</label>
+        <InputNumber id="Volumen" @bind-Value="revista.Volumen" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="Numero_ejemplar ">Numero de Ejemplar de la revista</label>
+        <InputNumber id="Numero_ejemplar " @bind-Value="revista.Numero_ejemplar " class="form-control" />
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </div>
+</EditForm>
+@code {
+    [Parameter]
+    public string titulo { get; set; }
+
+    private Revistas revista = new Revistas();
+    List<Revistas> revistas = new List<Revistas>();
+
+    protected async Task Guardar()
+    {
+        await localStorage.SetItemAsync("revistas", revistas);
+        NavigationManager.NavigateTo("/revista-crear");
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        revistas = await localStorage.GetItemAsync<List<Revistas>>("revistas");
+        revista = revistas.Find(c => c.Titulo == titulo);
+    }
+}
