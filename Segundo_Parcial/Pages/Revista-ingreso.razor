@@ -65,12 +65,12 @@
                     <td>@revista.A_publicacion</td>
                     <td>@revista.Volumen</td>
                     <td>@revista.Numero_ejemplar</td>
-                    @* <td>
+                    <td>
                         <button class="btn btn-danger"
                                 @onclick="@(() => Borrar(revista.Titulo))">
                             Eliminar
                         </button>
-                    </td> *@
+                    </td>
                     <td>
                         <button class="btn btn-warning"
                                 @onclick="@(() => NavigationManager.NavigateTo($"/revista-editar/{revista.Titulo}"))">
@@ -101,11 +101,11 @@
         revistas = await localStorage.GetItemAsync<List<Revistas>>("revistas");
     }
 
-    // protected async Task Borrar(string Titulo)
-    // {
-    //     revistas.Remove(revistas.First(c => c.Titulo == Titulo));
-    //     await localStorage.SetItemAsync("revistas", revistas);
+    protected async Task Borrar(string Titulo)
+    {
+        revistas.Remove(revistas.First(c => c.Titulo == Titulo));
+        await localStorage.SetItemAsync("revistas", revistas);
 
-    // }
+    }
 
 }
